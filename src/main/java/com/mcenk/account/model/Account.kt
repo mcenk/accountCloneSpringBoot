@@ -7,10 +7,11 @@ import javax.persistence.*
 
 @Entity
 data class Account(
+
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator)")
-    val id:String? = "",
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    val id:String?,
     val balance: BigDecimal?= BigDecimal.ZERO,
     val creationDate:LocalDateTime,
 
@@ -22,21 +23,18 @@ data class Account(
     // kotlin birden fazla const olusturuyor sonra uygun olani kullaniyor
 
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    val transaction: Set<Transaction>? = HashSet()
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    val transaction: Set<Transaction> = HashSet()
 
 
 ) {
-    constructor(customer: Customer, InitialCredit: BigDecimal, localDateTime: LocalDateTime) : this(
-
+    constructor(customer: Customer,balance: BigDecimal, creationDate: LocalDateTime) : this(
+        "",
         customer=customer,
-        balance=InitialCredit,
-        creationDate = localDateTime
+        balance=balance,
+        creationDate = creationDate
         
-    ) {
-
-    }
-
+    )
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -58,7 +56,9 @@ data class Account(
         result = 31 * result + (balance?.hashCode() ?: 0)
         result = 31 * result + creationDate.hashCode()
         result = 31 * result + (customer?.hashCode() ?: 0)
-        result = 31 * result + (transaction?.hashCode() ?: 0)
+        result = 31 * result + transaction.hashCode()
         return result
     }
+
+
 }

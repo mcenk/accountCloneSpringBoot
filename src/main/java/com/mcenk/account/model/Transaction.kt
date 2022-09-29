@@ -14,22 +14,22 @@ import javax.persistence.ManyToOne
 data class Transaction(
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator)")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     val id:String?,
 
     val transactionType: TransactionType? = TransactionType.INITIAL,
     val amount: BigDecimal?,
     val transactionDateTime: LocalDateTime?,
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = [CascadeType.ALL])
-    @JoinColumn(name = "account_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "account", nullable = false)
     val account: Account
 
 )
 
 {
     constructor(amount: BigDecimal, account: Account): this(
-        id = null,
+        "",
         amount= amount,
         transactionDateTime= LocalDateTime.now(),
         transactionType = TransactionType.INITIAL,

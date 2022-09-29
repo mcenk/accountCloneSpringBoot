@@ -9,7 +9,7 @@ import javax.persistence.*
 data class Customer(
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator)")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     val id:String?,
 
     val name: String?,
